@@ -1,5 +1,12 @@
-import { SetStateAction, useState } from "react"
+import { useState } from "react"
 import { useInvalidate } from "../libs/useApi";
+
+const formEncodeUser = (name: string, email: string) => {
+  return [
+    `name=${encodeURIComponent(name)}`,
+    `email=${encodeURIComponent(email)}`,
+  ].join('&')
+}
 
 const UserCreator = () => {
   const invalidate = useInvalidate()
@@ -24,9 +31,10 @@ const UserCreator = () => {
 
     fetch('http://localhost:3001/api/1/users', {
       method: 'POST',
-      body: JSON.stringify({
-        name, email
-      })
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: formEncodeUser(name, email)
     }).then(response => {
       if (response.ok) {
         setEmail('')
@@ -55,8 +63,8 @@ const UserCreator = () => {
   return (
     <div>
       <h3>Create user:</h3>
-      <input placeholder="Enter name..." onChange={updateField('name')}></input>
-      <input placeholder="Enter email..." onChange={updateField('email')}></input>
+      <input placeholder="Enter name..." onChange={updateField('name')} value={name}></input>
+      <input placeholder="Enter email..." onChange={updateField('email')} value={email}></input>
       <button type="button" disabled={ !name || !email } onClick={submit}>Create now!</button>
       { !!result && <p>{result}</p> }
     </div>
