@@ -2,6 +2,7 @@
   "version": 2,
   "projects": {
     "api": "apps/engineering",
-    "shared-server": "libs/server"
+    "shared-server": "libs/server",
+    "frontend": "apps/frontend"
   }
 }
